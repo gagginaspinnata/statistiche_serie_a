@@ -9,6 +9,11 @@ class Scraper:
 
     base_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
     corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
+    squadre = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
+        'atalanta', 'bologna', 'cagliari', 'torino', 'chievo', 'milan',
+        'parma', 'lazio', 'roma', 'sassuolo', 'fiorentina', 'sampdoria',
+        'juventus', 'napoli'
+    ]
 
     def __init__(self):
         
@@ -17,11 +22,72 @@ class Scraper:
 
         self.calendario = self.calcola_giornate()
 
-        self.controlla_x
+        print json.dumps(self.squadre_senza_pareggi())
 
-    def controlla_x(self, squadra):
 
-        print len(self.calendario)
+
+
+    def squadre_senza_pareggi(self):
+        ris = []
+        for squadra in self.squadre:
+            d = {}
+            risultati = self.risultati_squadra(squadra)
+            pareggio_mancante = self.pareggio_mancante_da(risultati)
+            d['squadra'] = squadra
+            d['x'] = pareggio_mancante
+
+            ris.append(d)
+        return ris
+
+
+    # funzione che data una squadra ritorna i suoi risultati in una forma di array. p = persa, v = vinta, x = pareggiata
+    # Da notare che prima di lanciare questa funzione è necessario che venga lanciata la funzione calcola_giornate()
+    def risultati_squadra(self, squadra):
+
+        risultati = []
+
+        for giornata in self.calendario:
+
+            for partita in giornata:
+
+                if(partita['squadra_1'] == squadra):
+
+                    if partita['risultato_1'] > partita['risultato_2']:
+                        risultati.append('v')
+                    elif partita['risultato_2'] > partita['risultato_1']:
+                        risultati.append('p')
+                    else:
+                        risultati.append('x')
+
+                elif (partita['squadra_2'] == squadra):
+
+                    if partita['risultato_1'] < partita['risultato_2']:
+                        risultati.append('v')
+                    elif partita['risultato_2'] < partita['risultato_1']:
+                        risultati.append('p')
+                    else:
+                        risultati.append('x')
+
+                # if(partita['squadra_1'] == squadra or partita['squadra_2'] == squadra):
+
+                #     print partita['squadra_1'] + ' vs ' + partita['squadra_2'] + ' ' + str(partita['risultato'])
+                #     risultati.append(partita['risultato'])
+
+        return risultati
+
+
+    # ritorna da quante giornate una squadra non pareggia
+    def pareggio_mancante_da(self, risultati):
+
+        x = 0
+
+        for ris in reversed(risultati):
+            if ris != 'x':
+                x = x +1
+            else:
+                break
+
+        return x
 
 
     # ritorna il numero dell'ultima giornata giocata
