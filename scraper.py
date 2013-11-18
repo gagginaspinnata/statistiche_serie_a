@@ -34,25 +34,25 @@ class Scraper:
 
         for giornata in range(1, self.giornate + 1):
             url =self.base_url + str(giornata) + '.shtml'
-            calendario.append(self.calcola_giornata(url))
+            calendario.append(self.calcola_giornata(url, giornata))
 
         return calendario
 
 
     # funzione che ritorna i risultati di una giornata
-    def calcola_giornata(self,giornata):
+    def calcola_giornata(self,url, giornata):
 
 
         # Creo l'oggetto necessario a beautifulsoup
-        self.soup = BeautifulSoup(self.get_source(giornata))
+        self.soup = BeautifulSoup(self.get_source(url))
 
         partite = self.soup.select('.giornata-campionato > li')
 
-        giornata = []
+        g = []
 
         for partita in partite:
             ris = {}
-            ris['giornata'] = 1
+            ris['giornata'] = giornata
             ris['squadra_1'] =  partita.select('.prima_squadra > a')[0].string
             ris['squadra_2'] =  partita.select('.seconda_squadra > a')[0].string
             ris['risultato_1'] = partita.select('.primo_risultato')[0].string
@@ -65,12 +65,12 @@ class Scraper:
                 ris['risultato'] = 1
             else:
                 ris['risultato'] = 2
-            giornata.append(ris)
+            g.append(ris)
 
-        return giornata
+        return g
 
 
-    # Funzione che ritorna il sorgente della pagina dove ci sono tutti i download
+    # Funzione che ritorna il sorgente della pagina 
     def get_source(self,url):
 
         r = requests.get(url)
