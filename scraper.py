@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #-*- coding: utf-8 -*-
 
+from flask import Flask, Request, Response
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -155,4 +156,14 @@ class Scraper:
         return pretty_source
 
 
-scraper = Scraper()
+# scraper = Scraper()
+
+application = app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, world'
+
+
+if __name__ == '__mail__':
+    app.run()
