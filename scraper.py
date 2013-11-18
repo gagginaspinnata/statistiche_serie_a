@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 #-*- coding: utf-8 -*-
 
-from flask import Flask, Request, Response
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -23,7 +22,7 @@ class Scraper:
 
         self.calendario = self.calcola_giornate()
 
-        print json.dumps(self.squadre_senza_pareggi())
+        # print json.dumps(self.squadre_senza_pareggi())
 
 
 
@@ -157,13 +156,3 @@ class Scraper:
 
 
 # scraper = Scraper()
-
-application = app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return 'Hello, world'
-
-
-if __name__ == '__mail__':
-    app.run()

@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-2 col-md-offset-5">
+    	<p>Attendere..</p>
+    	<img src="static/img/ajax-loader.gif">
+    </div>
+</div>
+<table class="table table-striped table-hover">
+	<thead>
+		<th>Squadra</th>
+		<th>Partite senza pareggio</th>
+	</thead>
+	<tbody>
+		
+	</tbody>
+</table>
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script>
+		$.get('/api/pareggi', function(data){
+			data = JSON.parse(data)
+			$.each(data, function(index, value){
+				console.log(value.squadra);
+				$('tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
+				$('.row').hide();
+				$('table').css('visibility','visible');
+			});
+		});
+	</script>
+{% endblock %}
