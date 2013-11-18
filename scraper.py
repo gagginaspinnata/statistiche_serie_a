@@ -15,9 +15,13 @@ class Scraper:
         # imposta il numero di giornate giocate
         self.giornate = int(self.giornata_corrente())
 
-        calendario = self.calcola_giornate()
+        self.calendario = self.calcola_giornate()
 
-        print json.dumps(calendario)
+        self.controlla_x
+
+    def controlla_x(self, squadra):
+
+        print len(self.calendario)
 
 
     # ritorna il numero dell'ultima giornata giocata
