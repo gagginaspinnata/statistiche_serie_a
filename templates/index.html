@@ -3,13 +3,13 @@
 {% block body %}
 <div class="row">
     <div class="col-md-2 col-md-offset-5">
-    	<p>Attendere..</p>
+    	<p>Loading Serie A</p>
     	<img src="static/img/ajax-loader.gif">
     </div>
 </div>
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover" id="serie_a">
 	<thead>
-		<th>Squadra</th>
+		<th>Squadra serie a</th>
 		<th>Partite senza pareggio</th>
 	</thead>
 	<tbody>
@@ -22,13 +22,23 @@
 
 {% block scripts %}
 	<script>
-		$.get('/api/pareggi', function(data){
+		$.get('/api/pareggi/serie_a', function(data){
 			data = JSON.parse(data)
 			$.each(data, function(index, value){
 				console.log(value.squadra);
-				$('tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
+				$('#serie_a tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
+				$('.row p').text('Loading Premier League');
+				$('#serie_a').css('visibility','visible');
+			});
+		});
+		$.get('/api/pareggi/premier', function(data){
+			data = JSON.parse(data)
+			$('body').append('<table id="premier" class="table table-hover table-striped"><thead><th>Squadre Premier</th><th>Partite senza pareggio</th></thead><tbody></tbody></table>')
+			$.each(data, function(index, value){
+				console.log(value.squadra);
+				$('#premier tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
 				$('.row').hide();
-				$('table').css('visibility','visible');
+				$('#premier').css('visibility','visible');
 			});
 		});
 	</script>
