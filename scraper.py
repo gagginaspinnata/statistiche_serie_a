@@ -15,6 +15,14 @@ class Scraper:
         'juventus', 'napoli'
     ]
 
+    premier_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/premierleague/calendario_'
+    premier_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/premierleague/risultati.shtml'
+    premier_teams = [
+        'newcastle', 'chelsea', 'fulham', 'man utd', 'hull city', 'sunderland',
+        'man city', 'norwich city', 'stoke city', 'southampton', 'wba', 'crystal palace',
+        'west ham', 'aston villa', 'arsenal', 'liverpool', 'everton', 'tottenham', 'cardiff city', 'swansea'
+    ]
+
     # base_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
     # corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
     # squadre = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
@@ -29,6 +37,10 @@ class Scraper:
             self.base_url = self.serie_a_url
             self.corrente_url = self.serie_a_corrente_url
             self.squadre = self.serie_a_teams
+        elif (league == 'premier'):
+            self.base_url = self.premier_url
+            self.corrente_url = self.premier_corrente_url
+            self.squadre = self.premier_teams
         
         # imposta il numero di giornate giocate
         self.giornate = int(self.giornata_corrente())
