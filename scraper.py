@@ -7,15 +7,28 @@ import json
 
 class Scraper:
 
-    base_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
-    corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
-    squadre = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
+    serie_a_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
+    serie_a_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
+    serie_a_teams = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
         'atalanta', 'bologna', 'cagliari', 'torino', 'chievo', 'milan',
         'parma', 'lazio', 'roma', 'sassuolo', 'fiorentina', 'sampdoria',
         'juventus', 'napoli'
     ]
 
-    def __init__(self):
+    # base_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
+    # corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
+    # squadre = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
+    #     'atalanta', 'bologna', 'cagliari', 'torino', 'chievo', 'milan',
+    #     'parma', 'lazio', 'roma', 'sassuolo', 'fiorentina', 'sampdoria',
+    #     'juventus', 'napoli'
+    # ]
+
+    def __init__(self, league='serie_a'):
+
+        if(league=='serie_a'):
+            self.base_url = self.serie_a_url
+            self.corrente_url = self.serie_a_corrente_url
+            self.squadre = self.serie_a_teams
         
         # imposta il numero di giornate giocate
         self.giornate = int(self.giornata_corrente())
