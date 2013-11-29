@@ -195,5 +195,5 @@ class Scraper:
         return result
 
 
-scraper = Scraper('legue1')
-print scraper.squadre_senza_pareggi()
+# scraper = Scraper('legue1')
+# print scraper.squadre_senza_pareggi()
