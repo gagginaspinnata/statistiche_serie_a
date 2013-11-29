@@ -8,11 +8,11 @@ from scraper import Scraper
 application = app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def home():
 	return render_template('index.html')
 
 @app.route('/api/pareggi/serie_a')
-def scraper():
+def serie_a():
 	scraper = Scraper()
 	data = scraper.squadre_senza_pareggi()
 	return json.dumps(data)
@@ -23,6 +23,24 @@ def premier():
 	scraper = Scraper('premier')
 	data = scraper.squadre_senza_pareggi()
 	return json.dumps(data)
+
+@app.route('/api/pareggi/liga')
+def liga():
+    scraper = Scraper('liga')
+    data = scraper.squadre_senza_pareggi()
+    return json.dumps(data)
+
+@app.route('/api/pareggi/bundes')
+def bundes():
+    scraper = Scraper('bundes')
+    data = scraper.squadre_senza_pareggi()
+    return json.dumps(data)
+
+@app.route('/api/pareggi/legue1')
+def legue1():
+    scraper = Scraper('legue1')
+    data = scraper.squadre_senza_pareggi()
+    return json.dumps(data)
 
 # @app.route('/template')
 # def template():

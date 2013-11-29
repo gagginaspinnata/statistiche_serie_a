@@ -13,7 +13,7 @@
 		<th>Partite senza pareggio</th>
 	</thead>
 	<tbody>
-		
+
 	</tbody>
 </table>
 
@@ -31,15 +31,51 @@
 				$('#serie_a').css('visibility','visible');
 			});
 		});
+
 		$.get('/api/pareggi/premier', function(data){
 			data = JSON.parse(data)
 			$('body').append('<table id="premier" class="table table-hover table-striped"><thead><th>Squadre Premier</th><th>Partite senza pareggio</th></thead><tbody></tbody></table>')
 			$.each(data, function(index, value){
 				console.log(value.squadra);
 				$('#premier tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
-				$('.row').hide();
+				$('.row p').text('Loading Liga Spagnola');
 				$('#premier').css('visibility','visible');
 			});
 		});
+
+        $.get('/api/pareggi/liga', function(data){
+            data = JSON.parse(data)
+            $('body').append('<table id="liga" class="table table-hover table-striped"><thead><th>Squadre Liga</th><th>Partite senza pareggio</th></thead><tbody></tbody></table>')
+            $.each(data, function(index, value){
+                console.log(value.squadra);
+                $('#liga tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
+                $('.row p').text('Loading Bundes Liga');
+                $('#liga').css('visibility','visible');
+            });
+        });
+
+
+        $.get('/api/pareggi/bundes', function(data){
+            data = JSON.parse(data)
+            $('body').append('<table id="bundes" class="table table-hover table-striped"><thead><th>Squadre Bundes</th><th>Partite senza pareggio</th></thead><tbody></tbody></table>')
+            $.each(data, function(index, value){
+                console.log(value.squadra);
+                $('#bundes tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
+                $('.row p').text('Loading Legue 1 Liga');
+                $('#bundes').css('visibility','visible');
+            });
+        });
+
+
+        $.get('/api/pareggi/legue1', function(data){
+            data = JSON.parse(data)
+            $('body').append('<table id="legue1" class="table table-hover table-striped"><thead><th>Squadre Legue 1</th><th>Partite senza pareggio</th></thead><tbody></tbody></table>')
+            $.each(data, function(index, value){
+                console.log(value.squadra);
+                $('#legue1 tbody').append('<tr><td>'+value.squadra+'</td><td>'+value.x+'</td></tr>');
+                $('.row').hide();
+                $('#legue1').css('visibility','visible');
+            });
+        });
 	</script>
 {% endblock %}
