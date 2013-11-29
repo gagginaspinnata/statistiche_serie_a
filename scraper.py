@@ -3,47 +3,49 @@
 
 import requests
 from bs4 import BeautifulSoup
-import json
 
 class Scraper:
 
     serie_a_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
     serie_a_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
-    serie_a_teams = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
-        'atalanta', 'bologna', 'cagliari', 'torino', 'chievo', 'milan',
-        'parma', 'lazio', 'roma', 'sassuolo', 'fiorentina', 'sampdoria',
-        'juventus', 'napoli'
-    ]
 
     premier_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/premierleague/calendario_'
     premier_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/premierleague/risultati.shtml'
-    premier_teams = [
-        'newcastle', 'chelsea', 'fulham', 'man utd', 'hull city', 'sunderland',
-        'man city', 'norwich city', 'stoke city', 'southampton', 'wba', 'crystal palace',
-        'west ham', 'aston villa', 'arsenal', 'liverpool', 'everton', 'tottenham', 'cardiff city', 'swansea'
-    ]
 
-    # base_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/calendario_'
-    # corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/seriea/index.shtml'
-    # squadre = ['catania', 'udinese', 'inter', 'livorno', 'genoa', 'verona',
-    #     'atalanta', 'bologna', 'cagliari', 'torino', 'chievo', 'milan',
-    #     'parma', 'lazio', 'roma', 'sassuolo', 'fiorentina', 'sampdoria',
-    #     'juventus', 'napoli'
-    # ]
+    liga_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/liga/calendario_'
+    liga_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/liga/risultati.shtml'
+
+    bundes_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/bundesliga/calendario_'
+    bundes_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/bundesliga/risultati.shtml'
+
+    legue1_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/ligue1/calendario_'
+    legue1_corrente_url = 'http://www.gazzetta.it/speciali/risultati_classifiche/2014/calcio/ligue1/risultati.shtml'
+
+
 
     def __init__(self, league='serie_a'):
 
         if(league=='serie_a'):
             self.base_url = self.serie_a_url
             self.corrente_url = self.serie_a_corrente_url
-            self.squadre = self.serie_a_teams
         elif (league == 'premier'):
             self.base_url = self.premier_url
             self.corrente_url = self.premier_corrente_url
-            self.squadre = self.premier_teams
-        
+        elif league == 'liga':
+            self.base_url = self.liga_url
+            self.corrente_url = self.liga_corrente_url
+        elif league == 'bundes':
+            self.base_url = self.bundes_url
+            self.corrente_url = self.bundes_corrente_url
+        elif league == 'legue1':
+            self.base_url = self.legue1_url
+            self.corrente_url = self.legue1_corrente_url
+
+
+        self.squadre = self.array_squadre(self.corrente_url)
+
         # imposta il numero di giornate giocate
-        self.giornate = int(self.giornata_corrente())
+        self.giornate = self.giornata_corrente()
 
         self.calendario = self.calcola_giornate()
 
@@ -51,7 +53,7 @@ class Scraper:
 
 
 
-
+    # returna an array with the teams and from how many match they does not draw
     def squadre_senza_pareggi(self):
         ris = []
         for squadra in self.squadre:
@@ -119,12 +121,12 @@ class Scraper:
     def giornata_corrente(self):
 
         soup = BeautifulSoup(self.get_source(self.corrente_url))
-        return  soup.select('.current1')[0].string
+        return  int(soup.select('.current1')[0].string)
 
 
     # funzione che ritorna un array contenente tutti i risultati di tutte le giornate
     def calcola_giornate(self):
-        
+
         calendario = []
 
         for giornata in range(1, self.giornate + 1):
@@ -153,7 +155,7 @@ class Scraper:
             ris['risultato_1'] = partita.select('.primo_risultato')[0].string
             ris['risultato_2'] = partita.select('.secondo_risultato')[0].string
             ris['data'] = partita.select('.giorno')[0].string
-           
+
             if(ris['risultato_1'] == ris['risultato_2']):
                 ris['risultato'] = 'x'
             elif(ris['risultato_1'] > ris['risultato_2']):
@@ -165,7 +167,7 @@ class Scraper:
         return g
 
 
-    # Funzione che ritorna il sorgente della pagina 
+    # Funzione che ritorna il sorgente della pagina
     def get_source(self,url):
 
         r = requests.get(url)
@@ -179,5 +181,19 @@ class Scraper:
         pretty_source = BeautifulSoup(source).prettify()
         return pretty_source
 
+    # returns an array containing all the teams from a league
+    def array_squadre(self, url):
 
-# scraper = Scraper()
+        soup = BeautifulSoup(self.get_source(url))
+        result = []
+        for squadra in soup.select('.prima_squadra > a'):
+            result.append(squadra.string)
+
+        for squadra in soup.select('.seconda_squadra > a'):
+            result.append(squadra.string)
+
+        return result
+
+
+scraper = Scraper('legue1')
+print scraper.squadre_senza_pareggi()
